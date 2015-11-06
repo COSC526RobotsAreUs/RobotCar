@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">RobotCar</string>
+    <string name="rstr_connect">Connect</string>
+    <string name="rstr_disconnect">Disconnect</string>
+
+    <string name="xv_connectBtn">Connect</string>
+    <string name="xv_diconnectBtn">Disconnect</string>
+    <string name="xv_connectionStatus">Not Connected</string>
+    <string name="xv_connection">NXT Device BlueTooth Connection</string>
 </resources>
