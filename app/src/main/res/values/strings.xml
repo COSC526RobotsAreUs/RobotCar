@@ -4,7 +4,15 @@
     <string name="rstr_disconnect">Disconnect</string>
 
     <string name="xv_connectBtn">Connect</string>
-    <string name="xv_diconnectBtn">Disconnect</string>
+    <string name="xv_diconnectBtn">Close</string>
     <string name="xv_connectionStatus">Not Connected</string>
+    <string name="xv_connectedDevice"></string>
     <string name="xv_connection">NXT Device BlueTooth Connection</string>
+    <string name="xv_driving">Want to drive Hector??</string>
+    <string name="xv_power">Power</string>
+
+    <string name="xv_MotorCUp"></string>
+    <string name="xv_MotorCpowertext">Power</string>
+    <string name="xv_MotorCseekBar"></string>
+    <string name="xv_MotorCDown"></string>
 </resources>
