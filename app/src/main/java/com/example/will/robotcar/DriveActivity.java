@@ -41,6 +41,9 @@ public class DriveActivity extends Activity implements View.OnClickListener,View
         m_progress = (TextView) findViewById(R.id.xv_powertext);
         m_progressC = (TextView) findViewById(R.id.xv_MotorCpowertext);
 
+        int power = cfp_BatteryPower();
+        System.out.println("powerrrr" + power);
+
         ImageButton top = (ImageButton)findViewById(R.id.top);
         top.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -48,8 +51,6 @@ public class DriveActivity extends Activity implements View.OnClickListener,View
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     cfp_moveMotor(0, m_power, 0x20);
                     cfp_moveMotor(1, m_power, 0x20);
-                    int power = cfp_BatteryPower();
-                    System.out.println("powerrrr" + power);
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     cfp_moveMotor(0, m_power, 0x00);
@@ -78,10 +79,10 @@ public class DriveActivity extends Activity implements View.OnClickListener,View
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    cfp_moveMotor(0, m_power, 0x20);
+                    cfp_moveMotor(1, m_power, 0x20);
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    cfp_moveMotor(0, m_power, 0x00);
+                    cfp_moveMotor(1, m_power, 0x00);
                 }
                 return false;
             }
@@ -91,10 +92,10 @@ public class DriveActivity extends Activity implements View.OnClickListener,View
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    cfp_moveMotor(1, m_power, 0x20);
+                    cfp_moveMotor(0, m_power, 0x20);
                 }
                 if(event.getAction() == MotionEvent.ACTION_UP){
-                    cfp_moveMotor(1, m_power, 0x00);
+                    cfp_moveMotor(0, m_power, 0x00);
                 }
                 return false;
             }
@@ -199,12 +200,12 @@ public class DriveActivity extends Activity implements View.OnClickListener,View
             int batteryResponse = is.read(mv_batteryresponse);
             System.out.println("batteryResponse"+batteryResponse);
             for(int i=0;i<7;i++)
-                System.out.println(mv_batteryresponse[i]);
+                System.out.printf("0x%02X \n",mv_batteryresponse[i]);
             int batteryPower = ((mv_batteryresponse[6]<<8) & 0x0000ff00) | (mv_batteryresponse[5] & 0x000000ff);
             System.out.println(batteryPower);
             double m_double = (double) batteryPower;
             System.out.println(m_double);
-            return (new Integer ((int) (m_double/9000) * 100));
+            return ((int) ((m_double/9000) * 100));
         }
         catch (Exception e) {
             return -1;
