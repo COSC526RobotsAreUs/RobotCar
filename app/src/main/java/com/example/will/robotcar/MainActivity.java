@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
-
 public class MainActivity extends TabActivity {
     public static BluetoothSocket socket;
     @Override
@@ -32,7 +31,6 @@ public class MainActivity extends TabActivity {
 
         tabHost.addTab(connectSpec);
         tabHost.addTab(driveSpec);
-
     }
 
 

@@ -10,13 +10,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,14 +34,13 @@ import java.util.Set;
  */
 public class ConnectActivity extends Activity implements View.OnClickListener{
     final String CC_ROBOTNAME = "NXT03";
-    TextView cv_label, cv_conncStatusmsg;
+    TextView cv_label, cv_conncStatusmsg,cv_connectDeviceNm;
     boolean cv_moveFlag = false;
     ListView cv_Blist;
 
     // BT Variables
     private BluetoothAdapter btInterface;
     private Set<BluetoothDevice> pairedDevices;
-    //private BluetoothSocket socket;
     private BluetoothDevice bd;
 
     private BroadcastReceiver btMonitor = null;
@@ -46,6 +48,8 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
     private OutputStream os = null;
 
     private Button cv_connectBtn, cv_disconnectBtn;
+    private ImageView flipImg;
+    private TableLayout cv_tableLayout;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +60,13 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
         cv_connectBtn.setOnClickListener(this);
         cv_disconnectBtn = (Button) findViewById(R.id.xv_diconnectBtn);
         cv_disconnectBtn.setOnClickListener(this);
-        cv_disconnectBtn.setEnabled(false);
+        //cv_disconnectBtn.setEnabled(false);
 
         cv_conncStatusmsg=(TextView)findViewById(R.id.xv_connectionStatus);
+        cv_connectDeviceNm=(TextView)findViewById(R.id.xv_connectedDevice);
+        flipImg=(ImageView)findViewById(R.id.BImgView);
+
+        cv_tableLayout = (TableLayout) findViewById(R.id.xv_tLImgBtn);
 
         setupBTMonitor();
     }
@@ -135,7 +143,6 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
                         break;
                     }
                 }
-
                 cv_ad.dismiss();
 
             }
@@ -147,7 +154,8 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
             MainActivity.socket.close();
             is.close();
             os.close();
-            cv_conncStatusmsg.setText(bd.getName() + " is disconnected " );
+            cv_conncStatusmsg.setText("Disconnected");
+            cv_connectDeviceNm.setText("");
         } catch (Exception e) {
             cv_conncStatusmsg.setText("Error in disconnect -> " + e.getMessage());
         }
@@ -162,13 +170,16 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
                     try {
                         is = MainActivity.socket.getInputStream();
                         os = MainActivity.socket.getOutputStream();
-                        cv_conncStatusmsg.setText("Connected to " + bd.getName());
+                        cv_conncStatusmsg.setText("Connected");
+                        cv_tableLayout.setBackgroundColor(Color.parseColor("#636F57"));
+
+                        cv_connectDeviceNm.setTextColor(Color.rgb(255, 165, 0));
+                        cv_connectDeviceNm.setText(bd.getName());
                     } catch (Exception e) {
                         cfp_disconnectNXT();
                         is = null;
                         os = null;
                     }
-                    ////cv_label.setText("Connection is good");
                 }
                 if (intent.getAction().equals(
                         "android.bluetooth.device.action.ACL_DISCONNECTED")) {
@@ -183,13 +194,13 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
         switch(v.getId()){
             case R.id.xv_connectBtn:
                 cfp_connectNXT();
-                cv_connectBtn.setEnabled(false);
-                cv_disconnectBtn.setEnabled(true);
+                //cv_connectBtn.setEnabled(false);
+                //cv_disconnectBtn.setEnabled(true);
                 break;
             case R.id.xv_diconnectBtn:
                 cfp_disconnectNXT();
-                cv_connectBtn.setEnabled(true);
-                cv_disconnectBtn.setEnabled(false);
+                //cv_connectBtn.setEnabled(true);
+                //cv_disconnectBtn.setEnabled(false);
                 break;
 
         }
