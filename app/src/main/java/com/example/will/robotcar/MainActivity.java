@@ -7,7 +7,20 @@ import android.os.Bundle;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+
 public class MainActivity extends TabActivity {
+    private static InputStream is;
+    private static OutputStream os;
+
+    public static InputStream getInputStream(){
+        return is;
+    }
+    public static OutputStream getOutputStream(){
+        return os;
+    }
+
     public static BluetoothSocket socket;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -28,7 +28,7 @@ public class BatteryLevelView extends View{
         redPaint.setAntiAlias(true);
         redPaint.setStrokeWidth((float) 15);
         redPaint.setStyle(Paint.Style.FILL);
-        redPaint.setColor(Color.parseColor("#CD5C5C"));
+        redPaint.setColor(Color.parseColor("#7E7E7E"));
 
         float left = this.getLeft();
         float top = this.getTop();
