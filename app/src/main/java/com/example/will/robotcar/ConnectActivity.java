@@ -51,6 +51,8 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
     private ImageView flipImg;
     private TableLayout cv_tableLayout;
 
+    private BatteryLevelView batteryLevelView;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.connect);
@@ -68,7 +70,13 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
 
         cv_tableLayout = (TableLayout) findViewById(R.id.xv_tLImgBtn);
 
+
         setupBTMonitor();
+
+        batteryLevelView = (BatteryLevelView)findViewById(R.id.batteryLevelView);
+        batteryLevelView.setPercent(50);
+        int power = cfp_BatteryPower();
+        System.out.println("powerrrr" + power);
     }
 
     @Override
@@ -187,6 +195,51 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
                 }
             }
         };
+    }
+
+    private int cfp_BatteryPower() {
+        try {
+            byte[] buffer = new byte[15];
+
+            buffer[0] = (byte) (15-2);			//length lsb
+            buffer[1] = 0;						// length msb
+            buffer[2] =  0x00;					// direct command (with response)
+            buffer[3] = 0x0B;					// set output state
+            buffer[4] = 0;          			// output 1 (motor B)
+            buffer[5] = 0;			            // power
+            buffer[6] = 0;					    // motor on + brake between PWM
+            buffer[7] = 0;						// regulation
+            buffer[8] = 0;						// turn ration??
+            buffer[9] = 0;  					// run state
+            buffer[10] = 0;
+            buffer[11] = 0;
+            buffer[12] = 0;
+            buffer[13] = 0;
+            buffer[14] = 0;
+
+            if(os == null){
+                os = MainActivity.socket.getOutputStream();
+            }
+            if(is == null){
+                is = MainActivity.socket.getInputStream();
+            }
+            os.write(buffer);
+            os.flush();
+
+            byte[] mv_batteryresponse = new byte[7];
+            int batteryResponse = is.read(mv_batteryresponse);
+            System.out.println("batteryResponse"+batteryResponse);
+            for(int i=0;i<7;i++)
+                System.out.printf("0x%02X \n",mv_batteryresponse[i]);
+            int batteryPower = ((mv_batteryresponse[6]<<8) & 0x0000ff00) | (mv_batteryresponse[5] & 0x000000ff);
+            System.out.println(batteryPower);
+            double m_double = (double) batteryPower;
+            System.out.println(m_double);
+            return ((int) ((m_double/9000) * 100));
+        }
+        catch (Exception e) {
+            return -1;
+        }
     }
 
     @Override
