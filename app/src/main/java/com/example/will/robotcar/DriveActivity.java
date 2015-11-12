@@ -41,8 +41,8 @@ public class DriveActivity extends Activity implements View.OnClickListener,View
         m_progress = (TextView) findViewById(R.id.xv_powertext);
         m_progressC = (TextView) findViewById(R.id.xv_MotorCpowertext);
 
-        int power = cfp_BatteryPower();
-        System.out.println("powerrrr" + power);
+        //int power = cfp_BatteryPower();
+        //System.out.println("powerrrr" + power);
 
         ImageButton top = (ImageButton)findViewById(R.id.top);
         top.setOnTouchListener(new View.OnTouchListener() {
@@ -166,7 +166,7 @@ public class DriveActivity extends Activity implements View.OnClickListener,View
         catch (Exception e) {
         }
     }
-
+    /*
     private int cfp_BatteryPower() {
         try {
             byte[] buffer = new byte[15];
@@ -211,7 +211,7 @@ public class DriveActivity extends Activity implements View.OnClickListener,View
             return -1;
         }
     }
-
+    */
     @Override
     public void onClick(View v) {
 
