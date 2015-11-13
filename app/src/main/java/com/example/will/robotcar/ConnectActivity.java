@@ -38,7 +38,6 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
     boolean cv_moveFlag = false;
     ListView cv_Blist;
 
-    // BT Variables
     private BluetoothAdapter btInterface;
     private Set<BluetoothDevice> pairedDevices;
     private BluetoothDevice bd;
@@ -50,6 +49,7 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
     private Button cv_connectBtn, cv_disconnectBtn;
     private ImageView flipImg;
     private TableLayout cv_tableLayout;
+    private TextView m_battery;
 
     private BatteryLevelView batteryLevelView;
 
@@ -62,7 +62,6 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
         cv_connectBtn.setOnClickListener(this);
         cv_disconnectBtn = (Button) findViewById(R.id.xv_diconnectBtn);
         cv_disconnectBtn.setOnClickListener(this);
-        //cv_disconnectBtn.setEnabled(false);
 
         cv_conncStatusmsg=(TextView)findViewById(R.id.xv_connectionStatus);
         cv_connectDeviceNm=(TextView)findViewById(R.id.xv_connectedDevice);
@@ -70,13 +69,9 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
 
         cv_tableLayout = (TableLayout) findViewById(R.id.xv_tLImgBtn);
 
+        m_battery = (TextView) findViewById(R.id.xv_BatteryLevel);
 
         setupBTMonitor();
-
-        batteryLevelView = (BatteryLevelView)findViewById(R.id.batteryLevelView);
-        batteryLevelView.setPercent(50);
-        int power = cfp_BatteryPower();
-        System.out.println("powerrrr" + power);
     }
 
     @Override
@@ -142,6 +137,13 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
                             MainActivity.socket = bd.createRfcommSocketToServiceRecord(
                                     java.util.UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
                             MainActivity.socket.connect();
+                            is = MainActivity.socket.getInputStream();
+                            os = MainActivity.socket.getOutputStream();
+                            batteryLevelView = (BatteryLevelView)findViewById(R.id.batteryLevelView);
+                            int power = cfp_BatteryPower();
+                            System.out.println("powerrrr" + power);
+                            batteryLevelView.setPercent(power);
+                            m_battery.setText("Battery Power  "+power);
 
                         }
                         catch (Exception e) {
@@ -176,8 +178,7 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
                 if (intent.getAction().equals(
                         "android.bluetooth.device.action.ACL_CONNECTED")) {
                     try {
-                        is = MainActivity.socket.getInputStream();
-                        os = MainActivity.socket.getOutputStream();
+
                         cv_conncStatusmsg.setText("Connected");
                         cv_tableLayout.setBackgroundColor(Color.parseColor("#636F57"));
 

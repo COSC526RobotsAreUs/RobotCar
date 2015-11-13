@@ -126,19 +126,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:id="@+id/editText"
-        android:text="Battery Level ?"
+        android:id="@+id/xv_BatteryLevel"
+        android:text="Battery Level"
         android:layout_below="@+id/tableLayout4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textSize="20sp"
+        android:textColor="#000000"
         android:textStyle="bold"/>
 
     <com.example.will.robotcar.BatteryLevelView
         android:layout_width="wrap_content"
         android:layout_height="40sp"
         android:id="@+id/batteryLevelView"
-        android:layout_below="@+id/editText"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/xv_BatteryLevel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="41dp" />
 
 </RelativeLayout>
