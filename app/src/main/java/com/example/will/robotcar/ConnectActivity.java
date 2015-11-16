@@ -2,6 +2,7 @@ package com.example.will.robotcar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -12,8 +13,10 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -53,6 +56,8 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
 
     private BatteryLevelView batteryLevelView;
 
+    private boolean hasConnected = false;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.connect);
@@ -62,6 +67,8 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
         cv_connectBtn.setOnClickListener(this);
         cv_disconnectBtn = (Button) findViewById(R.id.xv_diconnectBtn);
         cv_disconnectBtn.setOnClickListener(this);
+        //cv_disconnectBtn.setEnabled(false);
+        //cv_disconnectBtn.setTextColor(Color.WHITE);
 
         cv_conncStatusmsg=(TextView)findViewById(R.id.xv_connectionStatus);
         cv_connectDeviceNm=(TextView)findViewById(R.id.xv_connectedDevice);
@@ -87,6 +94,9 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
         unregisterReceiver(btMonitor);
     }
 
+
+
+
     private void cfp_connectNXT() {
 
         btInterface = BluetoothAdapter.getDefaultAdapter();
@@ -100,8 +110,24 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
             btNames.add(bd.getName() + "\n" + bd.getAddress());
         }
 
+
+
+
         final AlertDialog.Builder alertMsg = new AlertDialog.Builder(this);
-        alertMsg.setTitle("   Select NXT Device");
+        //alertMsg.setTitle("   Select NXT Device");
+
+/*
+        Dialog d = alertMsg.show();
+        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+        View divider = d.findViewById(dividerId);
+        divider.setBackgroundColor(Color.parseColor("#000000"));
+
+        int textViewId = d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
+        TextView tv = (TextView) d.findViewById(textViewId);
+        tv.setTextColor(Color.BLUE); */
+
+
+        alertMsg.setTitle(Html.fromHtml("<font color='#000000'>Select NXT Device</font>"));
 
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.bluetoothpairlist, null);
@@ -113,10 +139,13 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
 
         TextView listHeader=new TextView(this);
         listHeader.setTextSize(18);
-        listHeader.setText("\n        Paired Bluetooth Devices");
-        listHeader.setTextColor(Color.BLACK);
+        listHeader.setText("\n      Paired Bluetooth Devices");
+        listHeader.setTextColor(Color.WHITE);
+        listHeader.setBackgroundColor(Color.BLUE);
 
         cv_Blist.addHeaderView(listHeader);
+
+        cv_Blist.setBackgroundColor(Color.LTGRAY);
 
         cv_Blist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -130,25 +159,31 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
 
                 while (it.hasNext()) {
                     bd = it.next();
-                    System.out.println("bd.getName()"+bd.getName());
+                    System.out.println("bd.getName()" + bd.getName());
                     if (bd.getName().equalsIgnoreCase(lv_deviceNm[0])){
                         System.out.println("inside");
+                        boolean connectionWasSuccessful = true;
                         try {
                             MainActivity.socket = bd.createRfcommSocketToServiceRecord(
                                     java.util.UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
                             MainActivity.socket.connect();
+
                             is = MainActivity.socket.getInputStream();
                             os = MainActivity.socket.getOutputStream();
                             batteryLevelView = (BatteryLevelView)findViewById(R.id.batteryLevelView);
                             int power = cfp_BatteryPower();
                             System.out.println("powerrrr" + power);
                             batteryLevelView.setPercent(power);
-                            m_battery.setText("Battery Power  "+power);
+                            m_battery.setText("Battery Power  "+power+"%");
 
                         }
                         catch (Exception e) {
                             cv_conncStatusmsg.setText("Error interacting with remote device [" +
                                     e.getMessage() + "]");
+                            connectionWasSuccessful = false;
+                        }
+                        if(connectionWasSuccessful){
+                            hasConnected = true;
                         }
                         break;
                     }
@@ -164,8 +199,10 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
             MainActivity.socket.close();
             is.close();
             os.close();
+
             cv_conncStatusmsg.setText("Disconnected");
-            cv_connectDeviceNm.setText("");
+            cv_connectDeviceNm.setText("    ");
+
         } catch (Exception e) {
             cv_conncStatusmsg.setText("Error in disconnect -> " + e.getMessage());
         }
@@ -229,6 +266,9 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
 
             byte[] mv_batteryresponse = new byte[7];
             int batteryResponse = is.read(mv_batteryresponse);
+
+
+
             System.out.println("batteryResponse"+batteryResponse);
             for(int i=0;i<7;i++)
                 System.out.printf("0x%02X \n",mv_batteryresponse[i]);
@@ -247,14 +287,28 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.xv_connectBtn:
-                cfp_connectNXT();
+                if(hasConnected == false){
+                    cfp_connectNXT();
+                    cv_disconnectBtn.setTextColor(Color.BLACK);
+
+                }
+
+
                 //cv_connectBtn.setEnabled(false);
                 //cv_disconnectBtn.setEnabled(true);
+
                 break;
             case R.id.xv_diconnectBtn:
-                cfp_disconnectNXT();
-                //cv_connectBtn.setEnabled(true);
-                //cv_disconnectBtn.setEnabled(false);
+
+                if(hasConnected){
+                    cfp_disconnectNXT();
+                    hasConnected = false;
+                    //cv_disconnectBtn.setTextColor(Color.WHITE);
+                    //cv_connectBtn.setTextColor(Color.BLACK);
+                }
+
+
+
                 break;
 
         }
