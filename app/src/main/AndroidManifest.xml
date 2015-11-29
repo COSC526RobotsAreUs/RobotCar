@@ -19,6 +19,10 @@
         <activity android:name=".ConnectActivity" />
         
         <activity android:name=".DriveActivity" />
+
+        <activity android:name=".PollActivity" />
+
+        <activity android:name=".PopupActivity" />
     </application>
 
 </manifest>
