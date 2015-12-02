@@ -1,22 +1,22 @@
 package com.example.will.robotcar;
-
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,21 +25,28 @@ import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Will on 11/6/15.
  */
-public class ConnectActivity extends Activity implements View.OnClickListener{
+public class ConnectActivity extends AppCompatActivity implements View.OnClickListener{
+
+    Timer cv_timer;
+    MyTimerTask cv_myTimerTask;
+    SharedPreferences sp;
+
     final String CC_ROBOTNAME = "NXT03";
     TextView cv_label, cv_conncStatusmsg,cv_connectDeviceNm;
     boolean cv_moveFlag = false;
     ListView cv_Blist;
+    private int cv_batterypower;
 
     private BluetoothAdapter btInterface;
     private Set<BluetoothDevice> pairedDevices;
@@ -62,13 +69,17 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.connect);
 
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        ab.setLogo(R.drawable.nxticon);
+        ab.setTitle("Connect To Robot");
+        ab.setDisplayUseLogoEnabled(true);
+        ab.setDisplayShowHomeEnabled(true);
+
         cv_label = (TextView)findViewById(R.id.xv_txtLabel);
         cv_connectBtn = (Button) findViewById(R.id.xv_connectBtn);
         cv_connectBtn.setOnClickListener(this);
         cv_disconnectBtn = (Button) findViewById(R.id.xv_diconnectBtn);
         cv_disconnectBtn.setOnClickListener(this);
-        //cv_disconnectBtn.setEnabled(false);
-        //cv_disconnectBtn.setTextColor(Color.WHITE);
 
         cv_conncStatusmsg=(TextView)findViewById(R.id.xv_connectionStatus);
         cv_connectDeviceNm=(TextView)findViewById(R.id.xv_connectedDevice);
@@ -78,7 +89,28 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
 
         m_battery = (TextView) findViewById(R.id.xv_BatteryLevel);
 
+        sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         setupBTMonitor();
+    }
+
+   @Override
+    public  boolean onCreateOptionsMenu(Menu menu){
+       MenuInflater mf = getMenuInflater();
+       mf.inflate(R.menu.menu_main, menu);
+       return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.xv_menu:	startActivity(new Intent(this, EditPreferences.class));
+                return(true);
+            case R.id.xv_about_app:	startActivity(new Intent(this, EditPreferences.class));
+                return(true);
+            case R.id.xv_resetPreferences:	startActivity(new Intent(this, ResetPreferences.class));
+                return(true);
+        }
+        return(super.onOptionsItemSelected(item));
     }
 
     @Override
@@ -94,15 +126,11 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
         unregisterReceiver(btMonitor);
     }
 
-
-
-
     private void cfp_connectNXT() {
 
         btInterface = BluetoothAdapter.getDefaultAdapter();
         pairedDevices = btInterface.getBondedDevices();
         ArrayList<String> btNames = new ArrayList<String>();
-
 
         Iterator<BluetoothDevice> it = pairedDevices.iterator();
         while (it.hasNext()) {
@@ -110,25 +138,9 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
             btNames.add(bd.getName() + "\n" + bd.getAddress());
         }
 
-
-
-
         final AlertDialog.Builder alertMsg = new AlertDialog.Builder(this);
-        //alertMsg.setTitle("   Select NXT Device");
-
-/*
-        Dialog d = alertMsg.show();
-        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
-        View divider = d.findViewById(dividerId);
-        divider.setBackgroundColor(Color.parseColor("#000000"));
-
-        int textViewId = d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
-        TextView tv = (TextView) d.findViewById(textViewId);
-        tv.setTextColor(Color.BLUE); */
-
 
         alertMsg.setTitle(Html.fromHtml("<font color='#000000'>Select NXT Device</font>"));
-
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.bluetoothpairlist, null);
         alertMsg.setView(convertView);
@@ -171,11 +183,16 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
                             is = MainActivity.socket.getInputStream();
                             os = MainActivity.socket.getOutputStream();
                             batteryLevelView = (BatteryLevelView)findViewById(R.id.batteryLevelView);
-                            int power = cfp_BatteryPower();
-                            System.out.println("powerrrr" + power);
-                            batteryLevelView.setPercent(power);
-                            m_battery.setText("Battery Power  "+power+"%");
 
+                            if(sp.getBoolean("batteryInterval", false)){
+                                if(cv_timer != null)
+                                    cv_timer.cancel();
+                                else{
+                                    cv_timer = new Timer();
+                                    cv_myTimerTask = new MyTimerTask();
+                                    cv_timer.schedule(cv_myTimerTask, 0, 60000);
+                                }
+                            }
                         }
                         catch (Exception e) {
                             cv_conncStatusmsg.setText("Error interacting with remote device [" +
@@ -189,7 +206,6 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
                     }
                 }
                 cv_ad.dismiss();
-
             }
         });
     }
@@ -215,7 +231,6 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
                 if (intent.getAction().equals(
                         "android.bluetooth.device.action.ACL_CONNECTED")) {
                     try {
-
                         cv_conncStatusmsg.setText("Connected");
                         cv_tableLayout.setBackgroundColor(Color.parseColor("#636F57"));
 
@@ -235,51 +250,57 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
         };
     }
 
-    private int cfp_BatteryPower() {
-        try {
-            byte[] buffer = new byte[15];
+    class MyTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        System.out.println(1);
+                        byte[] buffer = new byte[15];
 
-            buffer[0] = (byte) (15-2);			//length lsb
-            buffer[1] = 0;						// length msb
-            buffer[2] =  0x00;					// direct command (with response)
-            buffer[3] = 0x0B;					// set output state
-            buffer[4] = 0;          			// output 1 (motor B)
-            buffer[5] = 0;			            // power
-            buffer[6] = 0;					    // motor on + brake between PWM
-            buffer[7] = 0;						// regulation
-            buffer[8] = 0;						// turn ration??
-            buffer[9] = 0;  					// run state
-            buffer[10] = 0;
-            buffer[11] = 0;
-            buffer[12] = 0;
-            buffer[13] = 0;
-            buffer[14] = 0;
+                        buffer[0] = (byte) (15 - 2);            //length lsb
+                        buffer[1] = 0;                        // length msb
+                        buffer[2] = 0x00;                    // direct command (with response)
+                        buffer[3] = 0x0B;                    // set output state
+                        buffer[4] = 0;                    // output 1 (motor B)
+                        buffer[5] = 0;                        // power
+                        buffer[6] = 0;                        // motor on + brake between PWM
+                        buffer[7] = 0;                        // regulation
+                        buffer[8] = 0;                        // turn ration??
+                        buffer[9] = 0;                    // run state
+                        buffer[10] = 0;
+                        buffer[11] = 0;
+                        buffer[12] = 0;
+                        buffer[13] = 0;
+                        buffer[14] = 0;
 
-            if(os == null){
-                os = MainActivity.socket.getOutputStream();
-            }
-            if(is == null){
-                is = MainActivity.socket.getInputStream();
-            }
-            os.write(buffer);
-            os.flush();
+                        if (os == null) {
+                            os = MainActivity.socket.getOutputStream();
+                        }
+                        if (is == null) {
+                            is = MainActivity.socket.getInputStream();
+                        }
+                        os.write(buffer);
+                        os.flush();
+                        byte[] mv_batteryresponse = new byte[7];
+                        int batteryResponse = is.read(mv_batteryresponse);
+                        for (int i = 0; i < 7; i++){
+                            System.out.printf("0x%02X \n", mv_batteryresponse[i]);
+                        }
 
-            byte[] mv_batteryresponse = new byte[7];
-            int batteryResponse = is.read(mv_batteryresponse);
-
-
-
-            System.out.println("batteryResponse"+batteryResponse);
-            for(int i=0;i<7;i++)
-                System.out.printf("0x%02X \n",mv_batteryresponse[i]);
-            int batteryPower = ((mv_batteryresponse[6]<<8) & 0x0000ff00) | (mv_batteryresponse[5] & 0x000000ff);
-            System.out.println(batteryPower);
-            double m_double = (double) batteryPower;
-            System.out.println(m_double);
-            return ((int) ((m_double/9000) * 100));
-        }
-        catch (Exception e) {
-            return -1;
+                        int batteryPower = ((mv_batteryresponse[6] << 8) & 0x0000ff00) | (mv_batteryresponse[5] & 0x000000ff);
+                        double m_double = (double) batteryPower;
+                        cv_batterypower = ((int) ((m_double / 9000) * 100));
+                        System.out.println("powerrrrr" + cv_batterypower);
+                        batteryLevelView.setPercent(cv_batterypower);
+                        m_battery.setText("Battery Power  " + cv_batterypower + "%");
+                    } catch (Exception e) {
+                        cv_batterypower = -1;
+                    }
+                }
+            });
         }
     }
 
@@ -290,27 +311,14 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
                 if(hasConnected == false){
                     cfp_connectNXT();
                     cv_disconnectBtn.setTextColor(Color.BLACK);
-
                 }
-
-
-                //cv_connectBtn.setEnabled(false);
-                //cv_disconnectBtn.setEnabled(true);
-
                 break;
             case R.id.xv_diconnectBtn:
-
                 if(hasConnected){
                     cfp_disconnectNXT();
                     hasConnected = false;
-                    //cv_disconnectBtn.setTextColor(Color.WHITE);
-                    //cv_connectBtn.setTextColor(Color.BLACK);
                 }
-
-
-
                 break;
-
         }
     }
 }

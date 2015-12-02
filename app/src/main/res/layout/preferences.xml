@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="50dp"
+    android:layout_width="50dp">
+    <CheckBoxPreference android:title="@string/xv_Batterylevel"
+        android:defaultValue="false"
+        android:summary="@string/xv_batterydescription"
+        android:key="batteryInterval" />
+    <ListPreference android:title="@string/xv_timeInterval"
+        android:summary="@string/xv_timeintervaldescription"
+        android:key="selectedMotors"
+        android:defaultValue="1"
+        android:entries="@array/xv_listArray"
+        android:entryValues="@array/xv_listValues" />
+    <CheckBoxPreference android:title="@string/xv_defaultSpeed"
+        android:defaultValue="false"
+        android:summary="@string/xv_defaultspeeddescription"
+        android:key="defaultSpeed" />
+</PreferenceScreen>
