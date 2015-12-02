@@ -1,8 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
-  <!--  <item android:id="@+id/rmenu_conn" android:title="@string/rstr_connect"
-        android:orderInCategory="100" app:showAsAction="always" />
-    <item android:id="@+id/rmenu_disconn" android:title="@string/rstr_disconnect"
-        android:orderInCategory="100" app:showAsAction="always" />-->
+
+   <item android:id="@+id/xv_menu"
+        android:title="@string/xv_preferences"
+       android:icon="@android:drawable/ic_menu_preferences"
+        app:showAsAction="never" />
+   <item android:id="@+id/xv_about_app"
+        android:title="@string/xv_aboutapp"
+        android:icon="@android:drawable/ic_dialog_alert"
+        app:showAsAction="never" />
+    <item android:id="@+id/xv_resetPreferences"
+        android:title="Reset Preferences"
+        android:icon="@android:drawable/ic_dialog_alert"
+        app:showAsAction="never" />
 </menu>

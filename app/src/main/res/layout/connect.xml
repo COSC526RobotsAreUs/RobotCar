@@ -18,8 +18,6 @@
         android:textStyle="bold"
         android:layout_marginTop="15dp"/>
 
-
-
     <TableLayout
         android:layout_width="90dp"
         android:layout_height="wrap_content"
