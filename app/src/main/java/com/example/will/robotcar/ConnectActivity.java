@@ -195,6 +195,12 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
                                     cv_timer.schedule(cv_myTimerTask, 0, 60000);
                                 }
                             }
+                            else{
+                                if(cv_timer != null)
+                                    cv_timer.cancel();
+                                else
+                                    cv_timer.schedule(cv_myTimerTask,0);
+                            }
                         }
                         catch (Exception e) {
                             cv_conncStatusmsg.setText("Error interacting with remote device [" +
@@ -222,7 +228,8 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
             cv_connectDeviceNm.setText("    ");
 
         } catch (Exception e) {
-            cv_conncStatusmsg.setText("Error in disconnect -> " + e.getMessage());
+            //cv_conncStatusmsg.setText("Error in disconnect -> " + e.getMessage());
+            cv_conncStatusmsg.setText("Your Robot has been disconnected");
         }
     }
 
