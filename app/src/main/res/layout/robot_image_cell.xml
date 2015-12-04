@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="number"
+        android:id="@+id/rowCharacter" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="47dp"
+        android:id="@+id/sensorImage"
+        android:layout_weight="0.14"
+        android:background="#b35d5d" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/poll"
+        android:id="@+id/button"
+
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stop"
+        android:id="@+id/button2"
+
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_weight="1"
+
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+<!--    -->
+</LinearLayout>

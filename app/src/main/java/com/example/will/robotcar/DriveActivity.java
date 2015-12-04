@@ -31,8 +31,10 @@ public class DriveActivity extends AppCompatActivity implements View.OnClickList
 
     private OutputStream os = MainActivity.getOutputStream();
     private InputStream is = MainActivity.getInputStream();
-    private SeekBar m_powerSeek;
-    private SeekBar m_powerSeekC;
+    //private SeekBar m_powerSeek;
+    //private SeekBar m_powerSeekC;
+    CustomSlider powerSeek;
+    CustomSlider motorSeek;
     private TextView m_progress;
     private TextView m_progressC;
     private int m_power = 50;
@@ -50,6 +52,7 @@ public class DriveActivity extends AppCompatActivity implements View.OnClickList
         ab.setDisplayUseLogoEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
 
+        /*
         m_powerSeek = (SeekBar) findViewById(R.id.xv_seekBar);
         m_powerSeek.setOnSeekBarChangeListener(this);
         m_powerSeek.setProgress(75);
@@ -58,7 +61,15 @@ public class DriveActivity extends AppCompatActivity implements View.OnClickList
         m_progress = (TextView) findViewById(R.id.xv_powertext);
         m_powerSeekC = (SeekBar) findViewById(R.id.xv_MotorCseekBar);
         m_powerSeekC.setOnSeekBarChangeListener(this);
-        m_powerSeekC.setProgress(75);
+        m_powerSeekC.setProgress(50);
+        */
+
+        powerSeek = (CustomSlider) findViewById(R.id.xv_seekBar);
+        motorSeek = (CustomSlider) findViewById(R.id.xv_MotorCseekBar);
+        powerSeek.setOnSliderChangedListener(this);
+        motorSeek.setOnSliderChangedListener(this);
+
+        m_progress = (TextView) findViewById(R.id.xv_powertext);
         m_progressC = (TextView) findViewById(R.id.xv_MotorCpowertext);
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -335,28 +346,18 @@ public class DriveActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        switch (seekBar.getId()) {
+    public void sliderChanged(CustomSlider slider,int newValue) {
+        switch (slider.getId()) {
             case R.id.xv_seekBar:
-                m_power = progress;
+                m_power = newValue;
                 m_progress = (TextView) findViewById(R.id.xv_powertext);
-                m_progress.setText("POWER  " + progress);
+                m_progress.setText("Power  " + newValue);
                 break;
             case R.id.xv_MotorCseekBar:
-                m_powerC = progress;
+                m_powerC = newValue;
                 m_progressC = (TextView) findViewById(R.id.xv_MotorCpowertext);
-                m_progressC.setText("POWER  " + progress);
+                m_progressC.setText("Power  " + newValue);
                 break;
         }
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-
     }
 }

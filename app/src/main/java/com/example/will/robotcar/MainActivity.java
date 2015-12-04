@@ -34,21 +34,35 @@ public class MainActivity extends TabActivity {
 
         TabHost tabHost = getTabHost();
 
+        // Tab for Connect
         TabSpec connectSpec = tabHost.newTabSpec("Connect");
         // setting Title and Icon for the Tab
         Intent connectIntent = new Intent(this, ConnectActivity.class);
         connectSpec.setIndicator("Connect", getResources().getDrawable(R.drawable.icon_connect));
         connectSpec.setContent(connectIntent);
 
-        // Tab for Photos
+        // Tab for Drive
         TabSpec driveSpec = tabHost.newTabSpec("Drive");
         // setting Title and Icon for the Tab
         Intent driveIntent = new Intent(this, DriveActivity.class);
         driveSpec.setIndicator("Drive", getResources().getDrawable(R.drawable.icon_drive));
         driveSpec.setContent(driveIntent);
 
+        TabSpec pollSpec = tabHost.newTabSpec("Poll");
+        Intent pollIntent = new Intent(this, PollActivity.class);
+        pollSpec.setIndicator("Poll");
+        pollSpec.setContent(pollIntent);
+
         tabHost.addTab(connectSpec);
         tabHost.addTab(driveSpec);
+        tabHost.addTab(pollSpec);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
