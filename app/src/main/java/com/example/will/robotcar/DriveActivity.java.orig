@@ -27,7 +27,11 @@ import java.util.Timer;
 /**
  * Created by Will on 11/6/15.
  */
+<<<<<<< HEAD
+public class DriveActivity extends Activity implements View.OnClickListener,View.OnTouchListener, SliderChanged{
+=======
 public class DriveActivity extends AppCompatActivity implements View.OnClickListener,View.OnTouchListener, SeekBar.OnSeekBarChangeListener{
+>>>>>>> upstream/master
 
     private OutputStream os = MainActivity.getOutputStream();
     private InputStream is = MainActivity.getInputStream();
@@ -45,6 +49,9 @@ public class DriveActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drive);
+<<<<<<< HEAD
+        /*
+=======
 
         android.support.v7.app.ActionBar ab = getSupportActionBar();
         ab.setLogo(R.drawable.nxticon);
@@ -52,13 +59,12 @@ public class DriveActivity extends AppCompatActivity implements View.OnClickList
         ab.setDisplayUseLogoEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
 
-        /*
+>>>>>>> upstream/master
         m_powerSeek = (SeekBar) findViewById(R.id.xv_seekBar);
         m_powerSeek.setOnSeekBarChangeListener(this);
         m_powerSeek.setProgress(75);
 
-
-        m_progress = (TextView) findViewById(R.id.xv_powertext);
+<<<<<<< HEAD
         m_powerSeekC = (SeekBar) findViewById(R.id.xv_MotorCseekBar);
         m_powerSeekC.setOnSeekBarChangeListener(this);
         m_powerSeekC.setProgress(50);
@@ -68,8 +74,13 @@ public class DriveActivity extends AppCompatActivity implements View.OnClickList
         motorSeek = (CustomSlider) findViewById(R.id.xv_MotorCseekBar);
         powerSeek.setOnSliderChangedListener(this);
         motorSeek.setOnSliderChangedListener(this);
+=======
+>>>>>>> upstream/master
 
         m_progress = (TextView) findViewById(R.id.xv_powertext);
+        m_powerSeekC = (SeekBar) findViewById(R.id.xv_MotorCseekBar);
+        m_powerSeekC.setOnSeekBarChangeListener(this);
+        m_powerSeekC.setProgress(75);
         m_progressC = (TextView) findViewById(R.id.xv_MotorCpowertext);
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());

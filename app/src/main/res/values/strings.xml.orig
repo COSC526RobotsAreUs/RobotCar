@@ -15,6 +15,7 @@
     <string name="xv_MotorCpowertext">Power</string>
     <string name="xv_MotorCseekBar"></string>
     <string name="xv_MotorCDown"></string>
+<<<<<<< HEAD
 
 
     <!-- for robot_image_cell.xml -->
@@ -25,6 +26,7 @@
     <string name="sensorPolling">NXT Device Sensor reading</string>
     <string name="resetSensors">Reset Sensors</string>
     <string name="resetServos">Reset Servos</string>
+=======
     <string name="xv_preferences">Preferences</string>
     <string name="xv_aboutapp">About App</string>
     <string name="xv_Batterylevel">Battery Level</string>
@@ -44,4 +46,5 @@
         <item>3</item>
     </string-array>
 
+>>>>>>> upstream/master
 </resources>
