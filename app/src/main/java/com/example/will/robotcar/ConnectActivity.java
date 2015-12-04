@@ -86,17 +86,6 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
         m_battery = (TextView) findViewById(R.id.xv_BatteryLevel);
 
         setupBTMonitor();
-        batteryLevelView = (BatteryLevelView)findViewById(R.id.batteryLevelView);
-        batteryLevelTimer = new Timer();
-        batteryLevelTimer.schedule(new BatteryLevelUpdaterTimerTask(), 60000, 60000);
-        batteryLevelUpdateHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                Bundle bundle = msg.getData();
-                int powerOfBattery = bundle.getInt("power");
-                batteryLevelView.setPercent(powerOfBattery);
-            }
-        };
     }
 
     @Override
@@ -322,16 +311,4 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
         }
     }
 
-    public class BatteryLevelUpdaterTimerTask extends TimerTask {
-
-        @Override
-        public void run() {
-            int power = cfp_BatteryPower();
-            Message message = batteryLevelUpdateHandler.obtainMessage();
-            Bundle bundle = new Bundle();
-            bundle.putInt("power", power);
-            message.setData(bundle);
-            batteryLevelUpdateHandler.sendMessage(message);
-        }
-    }
 }

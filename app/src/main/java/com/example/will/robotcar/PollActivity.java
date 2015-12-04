@@ -40,15 +40,6 @@ public class PollActivity extends AppCompatActivity {
         listOfSensorImageData.add(new SensorImageData("B", RES_456));
         listOfSensorImageData.add(new SensorImageData("C", RES_456));
 
-        if(getIntent() != null && getIntent().getExtras() != null){
-            Bundle extras = getIntent().getExtras();
-            int indexToReplace = extras.getInt("indexToReplace");
-            int resource = extras.getInt("resource");
-            String characterDescriptorOfItemToRemove = listOfSensorImageData.get(indexToReplace).getRowCharacter();
-            listOfSensorImageData.remove(indexToReplace);
-            listOfSensorImageData.add(indexToReplace, new SensorImageData(characterDescriptorOfItemToRemove, resource));
-        }
-
         cellAdapter = new RobotImageCellAdapter(this, R.layout.robot_image_cell, listOfSensorImageData);
 
         imageCellListView = (ListView)findViewById(R.id.robotImageListView);
@@ -59,13 +50,25 @@ public class PollActivity extends AppCompatActivity {
                 if(position < 4){
                     Intent intent = new Intent(pollActivity, PopupActivity.class);
                     intent.putExtra("index", position);
-                    startActivity(intent);
+                    startActivityForResult(intent, 1984);
                 }
             }
         });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-
-
-
+        System.out.println("@@@: " + resultCode);
+        if(data != null && data.getExtras() != null){
+            Bundle extras = data.getExtras();
+            int indexToReplace = extras.getInt("indexToReplace");
+            int resource = extras.getInt("resource");
+            System.out.println("indexToReplace@@@: " + indexToReplace);
+            System.out.println("resource@@@: " + resource);
+            String characterDescriptorOfItemToRemove = listOfSensorImageData.get(indexToReplace).getRowCharacter();
+            listOfSensorImageData.remove(indexToReplace);
+            listOfSensorImageData.add(indexToReplace, new SensorImageData(characterDescriptorOfItemToRemove, resource));
+            cellAdapter.notifyDataSetChanged();
+        }
     }
 }

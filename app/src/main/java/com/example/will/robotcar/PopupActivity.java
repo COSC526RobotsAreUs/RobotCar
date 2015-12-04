@@ -76,9 +76,13 @@ public class PopupActivity extends AppCompatActivity implements View.OnClickList
             indexToReplace = extras.getInt("index");
         }
 
-        Intent intent = new Intent(this, PollActivity.class);
+        //Intent intent = new Intent(this, PollActivity.class);
+        //Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent();
         intent.putExtra("indexToReplace", indexToReplace);
         intent.putExtra("resource", resource);
-        startActivity(intent);
+        //startActivity(intent);
+        setResult(indexToReplace, intent);
+        this.finish();
     }
 }
