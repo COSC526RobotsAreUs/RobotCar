@@ -27,19 +27,16 @@ import java.util.Timer;
 /**
  * Created by Will on 11/6/15.
  */
-public class DriveActivity extends AppCompatActivity implements View.OnClickListener,View.OnTouchListener, SeekBar.OnSeekBarChangeListener{
+public class DriveActivity extends AppCompatActivity implements View.OnClickListener,View.OnTouchListener, SliderChanged{
 
     private OutputStream os = MainActivity.getOutputStream();
     private InputStream is = MainActivity.getInputStream();
-    //private SeekBar m_powerSeek;
-    //private SeekBar m_powerSeekC;
     CustomSlider powerSeek;
     CustomSlider motorSeek;
     private TextView m_progress;
     private TextView m_progressC;
     private int m_power = 50;
     private int m_powerC = 50;
-
     private String motorSelected;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +49,6 @@ public class DriveActivity extends AppCompatActivity implements View.OnClickList
         ab.setDisplayUseLogoEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
 
-        /*
-        m_powerSeek = (SeekBar) findViewById(R.id.xv_seekBar);
-        m_powerSeek.setOnSeekBarChangeListener(this);
-        m_powerSeek.setProgress(75);
-
-
-        m_progress = (TextView) findViewById(R.id.xv_powertext);
-        m_powerSeekC = (SeekBar) findViewById(R.id.xv_MotorCseekBar);
-        m_powerSeekC.setOnSeekBarChangeListener(this);
-        m_powerSeekC.setProgress(50);
-        */
-
         powerSeek = (CustomSlider) findViewById(R.id.xv_seekBar);
         motorSeek = (CustomSlider) findViewById(R.id.xv_MotorCseekBar);
         powerSeek.setOnSliderChangedListener(this);
@@ -74,8 +59,14 @@ public class DriveActivity extends AppCompatActivity implements View.OnClickList
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         if(sp.getBoolean("defaultSpeed", false)){
-            m_powerSeekC.setProgress(100);
-            m_powerSeek.setProgress(100);
+            powerSeek.setPercent(100);
+            m_progress.setText("Power " + 100);
+            motorSeek.setPercent(100);
+            m_progressC.setText("Power " + 100);
+        }
+        else{
+            m_progress.setText("Power  " + 75);
+            m_progressC.setText("Power  " + 75);
         }
 
         motorSelected = sp.getString("selectedMotors","1");
@@ -287,23 +278,6 @@ public class DriveActivity extends AppCompatActivity implements View.OnClickList
         }
         return(super.onOptionsItemSelected(item));
     }
-
-    /*@Override
-    public void onResume() {
-        super.onResume();
-
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        if(sp.getBoolean("batteryInterval", false)){
-            if(cv_timer != null)
-                cv_timer.cancel();
-            else{
-                cv_timer = new Timer();
-                cv_myTimerTask = new MyTimerTask();
-                cv_timer.schedule(cv_myTimerTask, 0, 1000);
-            }
-        }
-    }*/
-
 
     private void cfp_moveMotor(int motor,int speed, int state) {
         try {

@@ -15,6 +15,12 @@ import android.view.View;
 public class CustomSlider extends View{
     float width;
     float height;
+
+    public void setPercent(int percent) {
+        this.percent = percent;
+        this.invalidate();
+    }
+
     int percent = 75;
     Paint goldPaint;
     Paint greyPaint;
