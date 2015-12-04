@@ -15,4 +15,14 @@
     <string name="xv_MotorCpowertext">Power</string>
     <string name="xv_MotorCseekBar"></string>
     <string name="xv_MotorCDown"></string>
+
+
+    <!-- for robot_image_cell.xml -->
+    <string name="poll">poll</string>
+    <string name="stop">stop</string>
+
+    <!-- for poll.xml -->
+    <string name="sensorPolling">NXT Device Sensor reading</string>
+    <string name="resetSensors">Reset Sensors</string>
+    <string name="resetServos">Reset Servos</string>
 </resources>

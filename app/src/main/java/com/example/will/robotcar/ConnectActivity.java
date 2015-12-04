@@ -13,6 +13,8 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Will on 11/6/15.
@@ -57,6 +61,9 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
     private BatteryLevelView batteryLevelView;
 
     private boolean hasConnected = false;
+
+    Handler batteryLevelUpdateHandler;
+    Timer batteryLevelTimer;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -267,8 +274,6 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
             byte[] mv_batteryresponse = new byte[7];
             int batteryResponse = is.read(mv_batteryresponse);
 
-
-
             System.out.println("batteryResponse"+batteryResponse);
             for(int i=0;i<7;i++)
                 System.out.printf("0x%02X \n",mv_batteryresponse[i]);
@@ -292,25 +297,18 @@ public class ConnectActivity extends Activity implements View.OnClickListener{
                     cv_disconnectBtn.setTextColor(Color.BLACK);
 
                 }
-
-
                 //cv_connectBtn.setEnabled(false);
                 //cv_disconnectBtn.setEnabled(true);
-
                 break;
             case R.id.xv_diconnectBtn:
-
                 if(hasConnected){
                     cfp_disconnectNXT();
                     hasConnected = false;
                     //cv_disconnectBtn.setTextColor(Color.WHITE);
                     //cv_connectBtn.setTextColor(Color.BLACK);
                 }
-
-
-
                 break;
-
         }
     }
+
 }

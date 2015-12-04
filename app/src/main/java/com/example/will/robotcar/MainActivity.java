@@ -4,9 +4,10 @@ import android.app.TabActivity;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -27,24 +28,30 @@ public class MainActivity extends TabActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         TabHost tabHost = getTabHost();
 
+        // Tab for Connect
         TabSpec connectSpec = tabHost.newTabSpec("Connect");
         // setting Title and Icon for the Tab
         Intent connectIntent = new Intent(this, ConnectActivity.class);
         connectSpec.setIndicator("Connect", getResources().getDrawable(R.drawable.icon_connect));
         connectSpec.setContent(connectIntent);
 
-        // Tab for Photos
+        // Tab for Drive
         TabSpec driveSpec = tabHost.newTabSpec("Drive");
         // setting Title and Icon for the Tab
         Intent driveIntent = new Intent(this, DriveActivity.class);
         driveSpec.setIndicator("Drive", getResources().getDrawable(R.drawable.icon_drive));
         driveSpec.setContent(driveIntent);
 
+        TabSpec pollSpec = tabHost.newTabSpec("Poll");
+        Intent pollIntent = new Intent(this, PollActivity.class);
+        pollSpec.setIndicator("Poll");
+        pollSpec.setContent(pollIntent);
+
         tabHost.addTab(connectSpec);
         tabHost.addTab(driveSpec);
+        tabHost.addTab(pollSpec);
     }
-
-
 }
