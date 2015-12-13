@@ -53,6 +53,13 @@ public class MainActivity extends TabActivity {
         pollSpec.setIndicator("Poll");
         pollSpec.setContent(pollIntent);
 
+        // Tab for SensorDrive
+        TabSpec servoSpec = tabHost.newTabSpec("Servo");
+        Intent ServoIntent = new Intent(this, DriveByAccelometer.class);
+        servoSpec.setIndicator("Servo");
+        servoSpec.setContent(ServoIntent);
+
+
         TabSpec soundSpec = tabHost.newTabSpec("Sounds");
         Intent soundsIntent = new Intent(this, SoundsActivity.class);
         soundSpec.setIndicator("Sounds");
@@ -61,6 +68,7 @@ public class MainActivity extends TabActivity {
         tabHost.addTab(connectSpec);
         tabHost.addTab(driveSpec);
         tabHost.addTab(pollSpec);
+        tabHost.addTab(servoSpec);
         tabHost.addTab(soundSpec);
     }
 

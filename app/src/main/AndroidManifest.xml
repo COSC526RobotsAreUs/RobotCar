@@ -30,5 +30,8 @@
             android:theme="@style/AppTheme"/>
         <activity android:name=".SoundsActivity"
             android:theme="@style/AppTheme"/>
+        <activity android:name=".DriveByAccelometer"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
     </application>
 </manifest>
