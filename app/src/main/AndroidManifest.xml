@@ -28,15 +28,7 @@
             android:theme="@style/AppTheme"/>
         <activity android:name=".PopupActivity"
             android:theme="@style/AppTheme"/>
-
-        <activity android:name=".ConnectActivity" />
-        
-        <activity android:name=".DriveActivity" />
-
-        <activity android:name=".PollActivity" />
-
-        <activity android:name=".PopupActivity" />
-
-        <activity android:name=".SoundsActivity" />
+        <activity android:name=".SoundsActivity"
+            android:theme="@style/AppTheme"//>
     </application>
 </manifest>
