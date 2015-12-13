@@ -53,9 +53,15 @@ public class MainActivity extends TabActivity {
         pollSpec.setIndicator("Poll");
         pollSpec.setContent(pollIntent);
 
+        TabSpec soundSpec = tabHost.newTabSpec("Sounds");
+        Intent soundsIntent = new Intent(this, SoundsActivity.class);
+        soundSpec.setIndicator("Sounds");
+        soundSpec.setContent(soundsIntent);
+
         tabHost.addTab(connectSpec);
         tabHost.addTab(driveSpec);
         tabHost.addTab(pollSpec);
+        tabHost.addTab(soundSpec);
     }
 
     @Override

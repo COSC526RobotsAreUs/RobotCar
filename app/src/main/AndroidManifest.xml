@@ -28,5 +28,7 @@
             android:theme="@style/AppTheme"/>
         <activity android:name=".PopupActivity"
             android:theme="@style/AppTheme"/>
+        <activity android:name=".SoundsActivity"
+            android:theme="@style/AppTheme"/>
     </application>
 </manifest>

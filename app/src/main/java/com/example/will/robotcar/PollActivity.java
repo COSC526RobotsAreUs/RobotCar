@@ -82,13 +82,10 @@ public class PollActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        System.out.println("@@@: " + resultCode);
         if(data != null && data.getExtras() != null){
             Bundle extras = data.getExtras();
             int indexToReplace = extras.getInt("indexToReplace");
             int resource = extras.getInt("resource");
-            System.out.println("indexToReplace@@@: " + indexToReplace);
-            System.out.println("resource@@@: " + resource);
             String characterDescriptorOfItemToRemove = listOfSensorImageData.get(indexToReplace).getRowCharacter();
             listOfSensorImageData.remove(indexToReplace);
             listOfSensorImageData.add(indexToReplace, new SensorImageData(characterDescriptorOfItemToRemove, resource));
