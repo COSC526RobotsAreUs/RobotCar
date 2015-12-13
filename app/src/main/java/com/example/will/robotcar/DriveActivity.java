@@ -1,7 +1,15 @@
 package com.example.will.robotcar;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -14,35 +22,32 @@ import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Timer;
 
 /**
  * Created by Will on 11/6/15.
  */
-public class DriveActivity extends Activity implements View.OnClickListener,View.OnTouchListener, SliderChanged{
+public class DriveActivity extends AppCompatActivity implements View.OnClickListener,View.OnTouchListener, SliderChanged{
 
     private OutputStream os = MainActivity.getOutputStream();
     private InputStream is = MainActivity.getInputStream();
-    //private SeekBar m_powerSeek;
-    //private SeekBar m_powerSeekC;
     CustomSlider powerSeek;
     CustomSlider motorSeek;
     private TextView m_progress;
     private TextView m_progressC;
     private int m_power = 50;
     private int m_powerC = 50;
+    private String motorSelected;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drive);
-        /*
-        m_powerSeek = (SeekBar) findViewById(R.id.xv_seekBar);
-        m_powerSeek.setOnSeekBarChangeListener(this);
-        m_powerSeek.setProgress(50);
 
-        m_powerSeekC = (SeekBar) findViewById(R.id.xv_MotorCseekBar);
-        m_powerSeekC.setOnSeekBarChangeListener(this);
-        m_powerSeekC.setProgress(50);
-        */
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        ab.setLogo(R.drawable.nxticon);
+        ab.setTitle("Drive the Robot");
+        ab.setDisplayUseLogoEnabled(true);
+        ab.setDisplayShowHomeEnabled(true);
 
         powerSeek = (CustomSlider) findViewById(R.id.xv_seekBar);
         motorSeek = (CustomSlider) findViewById(R.id.xv_MotorCseekBar);
@@ -52,17 +57,53 @@ public class DriveActivity extends Activity implements View.OnClickListener,View
         m_progress = (TextView) findViewById(R.id.xv_powertext);
         m_progressC = (TextView) findViewById(R.id.xv_MotorCpowertext);
 
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        if(sp.getBoolean("defaultSpeed", false)){
+            powerSeek.setPercent(100);
+            m_progress.setText("Power " + 100);
+            motorSeek.setPercent(100);
+            m_progressC.setText("Power " + 100);
+        }
+        else{
+            m_progress.setText("Power  " + 75);
+            m_progressC.setText("Power  " + 75);
+        }
+
+        motorSelected = sp.getString("selectedMotors","1");
+
         ImageButton top = (ImageButton)findViewById(R.id.top);
         top.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    cfp_moveMotor(0, m_power, 0x20);
-                    cfp_moveMotor(1, m_power, 0x20);
+                if(motorSelected.equalsIgnoreCase("1")){
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        cfp_moveMotor(0, m_power, 0x20);
+                        cfp_moveMotor(1, m_power, 0x20);
+                    }
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        cfp_moveMotor(0, m_power, 0x00);
+                        cfp_moveMotor(1, m_power, 0x00);
+                    }
                 }
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    cfp_moveMotor(0, m_power, 0x00);
-                    cfp_moveMotor(1, m_power, 0x00);
+                else if(motorSelected.equalsIgnoreCase("2")){
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        cfp_moveMotor(1, m_power, 0x20);
+                        cfp_moveMotor(2, m_power, 0x20);
+                    }
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        cfp_moveMotor(1, m_power, 0x00);
+                        cfp_moveMotor(2, m_power, 0x00);
+                    }
+                }
+                else{
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        cfp_moveMotor(0, m_power, 0x20);
+                        cfp_moveMotor(2, m_power, 0x20);
+                    }
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        cfp_moveMotor(0, m_power, 0x00);
+                        cfp_moveMotor(2, m_power, 0x00);
+                    }
                 }
                 return false;
             }
@@ -71,14 +112,37 @@ public class DriveActivity extends Activity implements View.OnClickListener,View
         cv_down.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    cfp_moveMotor(0, -m_power, 0x20);
-                    cfp_moveMotor(1, -m_power, 0x20);
+                if(motorSelected.equalsIgnoreCase("1")){
+                    if(event.getAction() == MotionEvent.ACTION_DOWN){
+                        cfp_moveMotor(0, -m_power, 0x20);
+                        cfp_moveMotor(1, -m_power, 0x20);
+                    }
+                    if(event.getAction() == MotionEvent.ACTION_UP){
+                        cfp_moveMotor(0, m_power, 0x00);
+                        cfp_moveMotor(1, m_power, 0x00);
+                    }
                 }
-                if(event.getAction() == MotionEvent.ACTION_UP){
-                    cfp_moveMotor(0, m_power, 0x00);
-                    cfp_moveMotor(1, m_power, 0x00);
+                else if(motorSelected.equalsIgnoreCase("2")){
+                    if(event.getAction() == MotionEvent.ACTION_DOWN){
+                        cfp_moveMotor(1, -m_power, 0x20);
+                        cfp_moveMotor(2, -m_power, 0x20);
+                    }
+                    if(event.getAction() == MotionEvent.ACTION_UP){
+                        cfp_moveMotor(1, m_power, 0x00);
+                        cfp_moveMotor(2, m_power, 0x00);
+                    }
                 }
+                else{
+                    if(event.getAction() == MotionEvent.ACTION_DOWN){
+                        cfp_moveMotor(0, -m_power, 0x20);
+                        cfp_moveMotor(2, -m_power, 0x20);
+                    }
+                    if(event.getAction() == MotionEvent.ACTION_UP){
+                        cfp_moveMotor(0, m_power, 0x00);
+                        cfp_moveMotor(2, m_power, 0x00);
+                    }
+                }
+
                 return false;
             }
         });
@@ -86,12 +150,37 @@ public class DriveActivity extends Activity implements View.OnClickListener,View
         cv_left.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    cfp_moveMotor(1, m_power, 0x20);
+                if(motorSelected.equalsIgnoreCase("1")){
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        cfp_moveMotor(0, -m_power, 0x20);
+                        cfp_moveMotor(1, m_power, 0x20);
+                    }
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        cfp_moveMotor(0, -m_power, 0x00);
+                        cfp_moveMotor(1, m_power, 0x00);
+                    }
                 }
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    cfp_moveMotor(1, m_power, 0x00);
+                else if(motorSelected.equalsIgnoreCase("2")){
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        cfp_moveMotor(2, -m_power, 0x20);
+                        cfp_moveMotor(1, m_power, 0x20);
+                    }
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        cfp_moveMotor(2, -m_power, 0x00);
+                        cfp_moveMotor(1, m_power, 0x00);
+                    }
                 }
+                else{
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        cfp_moveMotor(2, m_power, 0x20);
+                        cfp_moveMotor(0, -m_power, 0x20);
+                    }
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        cfp_moveMotor(2, m_power, 0x00);
+                        cfp_moveMotor(0, -m_power, 0x00);
+                    }
+                }
+
                 return false;
             }
         });
@@ -99,12 +188,37 @@ public class DriveActivity extends Activity implements View.OnClickListener,View
         cv_right.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    cfp_moveMotor(0, m_power, 0x20);
+                if(motorSelected.equalsIgnoreCase("1")){
+                    if(event.getAction() == MotionEvent.ACTION_DOWN){
+                        cfp_moveMotor(0, m_power, 0x20);
+                        cfp_moveMotor(1, -m_power, 0x20);
+                    }
+                    if(event.getAction() == MotionEvent.ACTION_UP){
+                        cfp_moveMotor(0, m_power, 0x00);
+                        cfp_moveMotor(1, -m_power, 0x00);
+                    }
                 }
-                if(event.getAction() == MotionEvent.ACTION_UP){
-                    cfp_moveMotor(0, m_power, 0x00);
+                else if(motorSelected.equalsIgnoreCase("2")){
+                    if(event.getAction() == MotionEvent.ACTION_DOWN){
+                        cfp_moveMotor(2, m_power, 0x20);
+                        cfp_moveMotor(1, -m_power, 0x20);
+                    }
+                    if(event.getAction() == MotionEvent.ACTION_UP){
+                        cfp_moveMotor(2, m_power, 0x00);
+                        cfp_moveMotor(1, -m_power, 0x00);
+                    }
                 }
+                else{
+                    if(event.getAction() == MotionEvent.ACTION_DOWN){
+                        cfp_moveMotor(0, m_power, 0x20);
+                        cfp_moveMotor(2, -m_power, 0x20);
+                    }
+                    if(event.getAction() == MotionEvent.ACTION_UP){
+                        cfp_moveMotor(0, m_power, 0x00);
+                        cfp_moveMotor(2, -m_power, 0x00);
+                    }
+                }
+
                 return false;
             }
         });
@@ -143,6 +257,26 @@ public class DriveActivity extends Activity implements View.OnClickListener,View
                 return false;
             }
         });
+    }
+
+    @Override
+    public  boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater mf = getMenuInflater();
+        mf.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.xv_menu:	startActivity(new Intent(this, EditPreferences.class));
+                return(true);
+            case R.id.xv_about_app:	startActivity(new Intent(this, EditPreferences.class));
+                return(true);
+            case R.id.xv_resetPreferences:	startActivity(new Intent(this, ResetPreferences.class));
+                return(true);
+        }
+        return(super.onOptionsItemSelected(item));
     }
 
     private void cfp_moveMotor(int motor,int speed, int state) {

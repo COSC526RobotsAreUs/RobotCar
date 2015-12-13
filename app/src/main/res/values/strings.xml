@@ -25,4 +25,23 @@
     <string name="sensorPolling">NXT Device Sensor reading</string>
     <string name="resetSensors">Reset Sensors</string>
     <string name="resetServos">Reset Servos</string>
+    <string name="xv_preferences">Preferences</string>
+    <string name="xv_aboutapp">About App</string>
+    <string name="xv_Batterylevel">Battery Level</string>
+    <string name="xv_timeInterval">Select Motors</string>
+    <string name="xv_defaultSpeed">Default Speed</string>
+    <string name="xv_batterydescription">Poll Battery level every 1 minute</string>
+    <string name="xv_timeintervaldescription">Motor and servo port(A B C) Layout</string>
+    <string name="xv_defaultspeeddescription">Set power level 100 instead of 75</string>
+    <string-array name="xv_listArray">
+        <item>Motor : A and B</item>
+        <item>Motor : B and C</item>
+        <item>Motor : A and C</item>
+    </string-array>
+    <string-array name="xv_listValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
 </resources>
