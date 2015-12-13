@@ -23,6 +23,8 @@
         <activity android:name=".PollActivity" />
 
         <activity android:name=".PopupActivity" />
+
+        <activity android:name=".SoundsActivity" />
     </application>
 
 </manifest>
