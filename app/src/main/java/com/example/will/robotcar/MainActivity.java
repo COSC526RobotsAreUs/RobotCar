@@ -60,10 +60,16 @@ public class MainActivity extends TabActivity {
         servoSpec.setContent(ServoIntent);
 
 
+        TabSpec soundSpec = tabHost.newTabSpec("Sounds");
+        Intent soundsIntent = new Intent(this, SoundsActivity.class);
+        soundSpec.setIndicator("Sounds");
+        soundSpec.setContent(soundsIntent);
+
         tabHost.addTab(connectSpec);
         tabHost.addTab(driveSpec);
         tabHost.addTab(pollSpec);
         tabHost.addTab(servoSpec);
+        tabHost.addTab(soundSpec);
     }
 
     @Override

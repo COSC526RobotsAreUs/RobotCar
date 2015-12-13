@@ -43,7 +43,8 @@
                 android:layout_marginBottom="5sp"
                 android:gravity="center"
                 android:contentDescription="@string/xv_power"
-                android:layout_column="2" />
+                android:layout_column="2"
+                android:adjustViewBounds="true" />
 
         </TableRow>
     </TableLayout>

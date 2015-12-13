@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hot"
+        android:id="@+id/hot"
+        android:layout_below="@+id/playSoundsTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="54dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/playSounds"
+        android:id="@+id/playSoundsTextView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cold"
+        android:id="@+id/cold"
+        android:layout_alignTop="@+id/hot"
+        android:layout_alignLeft="@+id/playSoundsTextView"
+        android:layout_alignStart="@+id/playSoundsTextView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/haveANiceDay"
+        android:id="@+id/haveANiceDay"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/imageView5"
+        android:layout_alignEnd="@+id/imageView5" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/goodMorning"
+        android:id="@+id/goodMorning"
+        android:layout_below="@+id/woops"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/thankYou"
+        android:id="@+id/thankYou"
+        android:layout_above="@+id/goodMorning"
+        android:layout_alignRight="@+id/goodBye"
+        android:layout_alignEnd="@+id/goodBye" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/woops"
+        android:id="@+id/woops"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/goodbye"
+        android:id="@+id/goodBye"
+        android:layout_alignTop="@+id/haveANiceDay"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_above="@+id/cold"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/playSoundsTextView"
+        android:layout_alignRight="@+id/hot"
+        android:layout_alignEnd="@+id/hot"
+        android:background="@drawable/hot" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView2"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignRight="@+id/cold"
+        android:layout_alignEnd="@+id/cold"
+        android:layout_alignLeft="@+id/cold"
+        android:layout_alignStart="@+id/cold"
+        android:layout_below="@+id/playSoundsTextView"
+        android:background="@drawable/cold" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView3"
+        android:layout_below="@+id/hot"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/woops"
+        android:layout_toLeftOf="@+id/cold"
+        android:layout_toStartOf="@+id/cold"
+        android:background="@drawable/oops_my_bad" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView4"
+        android:layout_above="@+id/thankYou"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/thankyou"
+        android:layout_alignTop="@+id/cold"
+        android:layout_toRightOf="@+id/cold"
+        android:layout_toEndOf="@+id/cold" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView5"
+        android:layout_above="@+id/haveANiceDay"
+        android:layout_below="@+id/goodMorning"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/goodMorning"
+        android:layout_alignEnd="@+id/goodMorning"
+        android:background="@drawable/have_a_nice_day" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView6"
+        android:layout_above="@+id/goodBye"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/goodbye"
+        android:layout_below="@+id/thankYou"
+        android:layout_toRightOf="@+id/imageView3"
+        android:layout_toEndOf="@+id/imageView3" />
+</RelativeLayout>
