@@ -6,7 +6,8 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:largeHeap="true">
         <activity android:name=".MainActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -15,9 +16,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".ConnectActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
         <activity android:name=".DriveActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
         <activity android:name=".EditPreferences"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"/>
@@ -25,11 +28,14 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme"/>
         <activity android:name=".PollActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
         <activity android:name=".PopupActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
         <activity android:name=".SoundsActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
         <activity android:name=".DriveByAccelometer"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"/>

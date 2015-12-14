@@ -75,7 +75,7 @@ public class DriveActivity extends AppCompatActivity implements View.OnClickList
         top.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(motorSelected.equalsIgnoreCase("1")){
+                if(motorSelected.equalsIgnoreCase("1")){// A, B
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
                         cfp_moveMotor(0, m_power, 0x20);
                         cfp_moveMotor(1, m_power, 0x20);

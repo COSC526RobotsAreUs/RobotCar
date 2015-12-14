@@ -30,12 +30,6 @@ public class BatteryLevelView extends View{
         redPaint.setStyle(Paint.Style.FILL);
         redPaint.setColor(Color.parseColor("#7E7E7E"));
 
-        float left = this.getLeft();
-        float top = this.getTop();
-        float right = this.getRight();
-        float bottom = this.getBottom();
-        System.out.println("left" + left + ", right:" + right);
-        System.out.println("top" + top + ", bottom:" + bottom);
         canvas.drawRect((float)0.0, (float)0.0, this.getWidth(), this.getHeight(), redPaint);
 
         Paint greenPaint = new Paint();

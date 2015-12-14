@@ -16,24 +16,21 @@ import android.widget.TextView;
  */
 public class DriveByAccelometer extends AppCompatActivity  implements SensorEventListener {
 
-
-
-    private float mLastX, mLastY, mLastZ;
-
     private long lastUpdate = 0;
-    private static final int SHAKE_THRESHOLD = 600;
 
-    private boolean mInitialized;
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
-    private final float NOISE = (float) 2.0;
+
+    private MotorMover motorMover;
+    private boolean hasMovedSinceLastStopSignal = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.accelometerdrive);
 
-        mInitialized = false;
+        motorMover = new MotorMover(MainActivity.getOutputStream());
+
 
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -48,7 +45,8 @@ public class DriveByAccelometer extends AppCompatActivity  implements SensorEven
         TextView tvX= (TextView)findViewById(R.id.x_axis);
         TextView tvY= (TextView)findViewById(R.id.y_axis);
         TextView tvZ= (TextView)findViewById(R.id.z_axis);
-        ImageView iv = (ImageView)findViewById(R.id.image);
+
+        double THRESH = 2.0;
 
         if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 
@@ -58,101 +56,41 @@ public class DriveByAccelometer extends AppCompatActivity  implements SensorEven
 
             long curTime = System.currentTimeMillis();
 
-            if ((curTime - lastUpdate) > 5000) {
+            if ((curTime - lastUpdate) > 500) {
 
                 System.out.println("Initial"+curTime+"curTime - lastUpdate"+(curTime - lastUpdate));
-                long diffTime = (curTime - lastUpdate);
                 lastUpdate = curTime;
-                float deltaX = Math.abs(mLastX - x);
-                float deltaY = Math.abs(mLastY - y);
-                float deltaZ = Math.abs(mLastZ - z);
-                System.out.println("xyz"+deltaX+"   "+deltaY+ "  " +deltaZ);
-                tvX.setText(Float.toString(deltaX));
-                tvY.setText(Float.toString(deltaY));
-                tvZ.setText(Float.toString(deltaZ));
+                System.out.println("xyz" + x + "   " + y + "  " + z);
+                tvX.setText(Float.toString(x));
+                tvY.setText(Float.toString(y));
+                tvZ.setText(Float.toString(z));
 
-                iv.setVisibility(View.VISIBLE);
+                boolean isXBetweenThresholds = (x > -THRESH && x < THRESH);
+                boolean isYBetweenThresholds = (y > -THRESH && y < THRESH);
 
-                if (deltaX > deltaY) {
-
-                    iv.setImageResource(R.drawable.horizontalshaker);
-                }
-
-                else if (deltaY > deltaX) {
-
-                    iv.setImageResource(R.drawable.verticalshake);
-                }
-
-                else {
-                    iv.setVisibility(View.INVISIBLE);
+                if (x > -THRESH && x < THRESH && y > -THRESH && y < THRESH){//at rest (i.e. no movement)
+                    if (hasMovedSinceLastStopSignal){
+                        motorMover.stop();
+                        hasMovedSinceLastStopSignal = false;
+                    }
+                }else if (y < -THRESH && isXBetweenThresholds){//move forward
+                    System.out.println("FORWARD");
+                    motorMover.moveForward();
+                    hasMovedSinceLastStopSignal = true;
+                }else if (y > THRESH && isXBetweenThresholds){//move backward
+                    System.out.println("BACK");
+                    motorMover.moveBack();
+                    hasMovedSinceLastStopSignal = true;
+                }else if (x < -THRESH && isYBetweenThresholds){//move right
+                    System.out.println("RIGHT");
+                    motorMover.moveRight();
+                    hasMovedSinceLastStopSignal = true;
+                }else if (x > THRESH && isYBetweenThresholds){//move left
+                    System.out.println("LEFT");
+                    motorMover.moveLeft();
+                    hasMovedSinceLastStopSignal = true;
                 }
             }
-
-
-
-
-
-
-         /*  long curTime = System.currentTimeMillis();
-
-            System.out.println("Initial"+curTime+"curTime - lastUpdate"+(curTime - lastUpdate));
-            if ((curTime - lastUpdate) > 5000) {
-                if (!mInitialized) {
-
-                    mLastX = x;
-                    mLastY = y;
-                    mLastZ = z;
-
-                    tvX.setText("0.0");
-                    tvY.setText("0.0");
-                    tvZ.setText("0.0");
-
-                    mInitialized = true;
-
-                    long diffTime = (curTime - lastUpdate);
-                    lastUpdate = curTime;
-                }
-
-
-
-                else {
-
-                    float deltaX = Math.abs(mLastX - x);
-                    float deltaY = Math.abs(mLastY - y);
-                    float deltaZ = Math.abs(mLastZ - z);
-
-                    if (deltaX < NOISE) deltaX = (float) 0.0;
-                    if (deltaY < NOISE) deltaY = (float) 0.0;
-                    if (deltaZ < NOISE) deltaZ = (float) 0.0;
-
-                    mLastX = x;
-                    mLastY = y;
-                    mLastZ = z;
-
-                    tvX.setText(Float.toString(deltaX));
-                    tvY.setText(Float.toString(deltaY));
-                    tvZ.setText(Float.toString(deltaZ));
-
-                    iv.setVisibility(View.VISIBLE);
-
-                    if (deltaX > deltaY) {
-
-                        iv.setImageResource(R.drawable.horizontalshaker);
-                    }
-
-                    else if (deltaY > deltaX) {
-
-                        iv.setImageResource(R.drawable.verticalshake);
-                    }
-
-                    else {
-                        iv.setVisibility(View.INVISIBLE);
-                    }
-
-                    long diffTime = (curTime - lastUpdate);
-                    lastUpdate = curTime;
-                }
-            }*/
 
         }
 
