@@ -8,10 +8,10 @@
         android:layout_height="wrap_content"
         android:text="@string/hot"
         android:id="@+id/hot"
+        android:layout_marginTop="55dp"
         android:layout_below="@+id/playSoundsTextView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="54dp" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,8 +37,8 @@
         android:text="@string/haveANiceDay"
         android:id="@+id/haveANiceDay"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/imageView5"
-        android:layout_alignEnd="@+id/imageView5" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -72,9 +72,9 @@
         android:layout_height="wrap_content"
         android:text="@string/goodbye"
         android:id="@+id/goodBye"
-        android:layout_alignTop="@+id/haveANiceDay"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/imageView4"
+        android:layout_alignEnd="@+id/imageView4" />
 
     <ImageView
         android:layout_width="wrap_content"
