@@ -38,7 +38,7 @@ public class MainActivity extends TabActivity {
         TabSpec connectSpec = tabHost.newTabSpec("Connect");
         // setting Title and Icon for the Tab
         Intent connectIntent = new Intent(this, ConnectActivity.class);
-        connectSpec.setIndicator("Connect", getResources().getDrawable(R.drawable.icon_connect));
+        connectSpec.setIndicator("Conn", getResources().getDrawable(R.drawable.icon_connect));
         connectSpec.setContent(connectIntent);
 
         // Tab for Drive
@@ -62,7 +62,7 @@ public class MainActivity extends TabActivity {
 
         TabSpec soundSpec = tabHost.newTabSpec("Sounds");
         Intent soundsIntent = new Intent(this, SoundsActivity.class);
-        soundSpec.setIndicator("Sounds");
+        soundSpec.setIndicator("Play");
         soundSpec.setContent(soundsIntent);
 
         tabHost.addTab(connectSpec);

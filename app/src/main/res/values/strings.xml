@@ -36,11 +36,11 @@
     <string name="hot">Hot</string>
     <string name="playSounds">Play Sounds</string>
     <string name="cold">Cold</string>
-    <string name="haveANiceDay">HaveANiceDay</string>
-    <string name="goodMorning">GoodMorning</string>
-    <string name="thankYou">ThankYou</string>
+    <string name="haveANiceDay">Have A Nice Day</string>
+    <string name="goodMorning">Good Morning</string>
+    <string name="thankYou">Thank You</string>
     <string name="woops">Woops</string>
-    <string name="goodbye">GoodBye</string>
+    <string name="goodbye">Good Bye</string>
     <string-array name="xv_listArray">
         <item>Motor : A and B</item>
         <item>Motor : B and C</item>
