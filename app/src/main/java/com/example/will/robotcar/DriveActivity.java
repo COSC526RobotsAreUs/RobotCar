@@ -271,8 +271,6 @@ public class DriveActivity extends AppCompatActivity implements View.OnClickList
         switch (item.getItemId()) {
             case R.id.xv_menu:	startActivity(new Intent(this, EditPreferences.class));
                 return(true);
-            case R.id.xv_about_app:	startActivity(new Intent(this, EditPreferences.class));
-                return(true);
             case R.id.xv_resetPreferences:	startActivity(new Intent(this, ResetPreferences.class));
                 return(true);
         }

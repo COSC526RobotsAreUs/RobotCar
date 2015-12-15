@@ -71,8 +71,6 @@ public class PollActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.xv_menu:	startActivity(new Intent(this, EditPreferences.class));
                 return(true);
-            case R.id.xv_about_app:	startActivity(new Intent(this, EditPreferences.class));
-                return(true);
             case R.id.xv_resetPreferences:	startActivity(new Intent(this, ResetPreferences.class));
                 return(true);
         }
