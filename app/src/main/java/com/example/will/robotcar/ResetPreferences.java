@@ -12,7 +12,7 @@ public class ResetPreferences extends PreferenceActivity  {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.layout.preferences);
+        addPreferencesFromResource(R.layout.resetpref);
 
         SharedPreferences lv_sP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         SharedPreferences.Editor lv_editor = lv_sP.edit();

@@ -6,10 +6,6 @@
         android:title="@string/xv_preferences"
        android:icon="@android:drawable/ic_menu_preferences"
         app:showAsAction="never" />
-   <item android:id="@+id/xv_about_app"
-        android:title="@string/xv_aboutapp"
-        android:icon="@android:drawable/ic_dialog_alert"
-        app:showAsAction="never" />
     <item android:id="@+id/xv_resetPreferences"
         android:title="Reset Preferences"
         android:icon="@android:drawable/ic_dialog_alert"

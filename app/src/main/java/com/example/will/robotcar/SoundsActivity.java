@@ -1,7 +1,11 @@
 package com.example.will.robotcar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -47,6 +51,24 @@ public class SoundsActivity extends AppCompatActivity implements View.OnClickLis
         goodByeBtn.setOnClickListener(this);
         woopsBtn = (Button)findViewById(R.id.woops);
         woopsBtn.setOnClickListener(this);
+    }
+
+    @Override
+    public  boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater mf = getMenuInflater();
+        mf.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.xv_menu:	startActivity(new Intent(this, EditPreferences.class));
+                return(true);
+            case R.id.xv_resetPreferences:	startActivity(new Intent(this, ResetPreferences.class));
+                return(true);
+        }
+        return(super.onOptionsItemSelected(item));
     }
 
     private void playSoundFile(String fileName){

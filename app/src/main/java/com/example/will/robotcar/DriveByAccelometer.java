@@ -1,12 +1,16 @@
 package com.example.will.robotcar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,11 +35,28 @@ public class DriveByAccelometer extends AppCompatActivity  implements SensorEven
 
         motorMover = new MotorMover(MainActivity.getOutputStream());
 
-
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
+    }
+
+    @Override
+    public  boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater mf = getMenuInflater();
+        mf.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.xv_menu:	startActivity(new Intent(this, EditPreferences.class));
+                return(true);
+            case R.id.xv_resetPreferences:	startActivity(new Intent(this, ResetPreferences.class));
+                return(true);
+        }
+        return(super.onOptionsItemSelected(item));
     }
 
     @Override

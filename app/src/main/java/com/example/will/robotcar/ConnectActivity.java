@@ -107,8 +107,6 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
         switch (item.getItemId()) {
             case R.id.xv_menu:	startActivity(new Intent(this, EditPreferences.class));
                 return(true);
-            case R.id.xv_about_app:	startActivity(new Intent(this, EditPreferences.class));
-                return(true);
             case R.id.xv_resetPreferences:	startActivity(new Intent(this, ResetPreferences.class));
                 return(true);
         }
@@ -198,8 +196,12 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
                             else{
                                 if(cv_timer != null)
                                     cv_timer.cancel();
-                                else
-                                    cv_timer.schedule(cv_myTimerTask,0);
+                                else {
+                                    System.out.println("geeeek");
+                                    cv_timer = new Timer();
+                                    cv_myTimerTask = new MyTimerTask();
+                                    cv_timer.schedule(cv_myTimerTask, 0);
+                                }
                             }
                         }
                         catch (Exception e) {
@@ -228,7 +230,6 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
             cv_connectDeviceNm.setText("    ");
 
         } catch (Exception e) {
-            //cv_conncStatusmsg.setText("Error in disconnect -> " + e.getMessage());
             cv_conncStatusmsg.setText("Your Robot has been disconnected");
         }
     }
